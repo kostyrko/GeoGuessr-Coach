@@ -1,0 +1,5 @@
+prd/
+/.angular/
+/dist/
+/node_modules/
+*.log
