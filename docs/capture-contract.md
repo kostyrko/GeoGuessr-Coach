@@ -2,7 +2,7 @@
 
 ## Automatic collection behavior
 
-The collector will be automatic once its adapter is implemented in GGC-005: the Manifest V3 content script is registered for GeoGuessr pages, so users will **not** start collection each day or for each game. This ticket defines that automatic behavior; it does not yet enable collection.
+The collector runs automatically while the extension is installed and enabled in Chrome: the Manifest V3 content scripts are registered for GeoGuessr pages, so users do **not** start collection each day or for each game.
 
 Automatic does not mean unrestricted. The collector must remain idle unless all of the following are true:
 
@@ -24,7 +24,7 @@ GeoGuessr content script
   → future parser, repository, analytics, and UI
 ```
 
-`RawCaptureEnvelope` is the only collector/parser boundary. `NormalizedParserInput` deliberately removes request metadata, DOM state, account data, and other players’ leaderboard entries. Those lower layers must never import collector or page-adapter code.
+`RawCaptureEnvelope` is the only collector/parser boundary. `NormalizedParserInput` deliberately removes request metadata, DOM state, account data, and other players’ leaderboard entries. Those lower layers must never import collector or page-adapter code. The current background listener logs the envelope locally for development only; persistence begins in the later data-model/repository tickets.
 
 ## Capture lifecycle
 
