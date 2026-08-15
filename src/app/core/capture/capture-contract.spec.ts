@@ -4,6 +4,9 @@ import {
   toParserInput,
   type RawCaptureEnvelope,
 } from './capture-contract';
+import completedFixture from './fixtures/daily-challenge-free.completed.json';
+import expectedParserInputFixture from './fixtures/daily-challenge-free.expected-parser-input.json';
+import partialFixture from './fixtures/daily-challenge-free.partial.json';
 
 function createEnvelope(): RawCaptureEnvelope {
   return {
@@ -42,33 +45,29 @@ function createEnvelope(): RawCaptureEnvelope {
 
 describe('toParserInput', () => {
   it('removes leaderboard and browser concerns from parser input', () => {
-    const parserInput = toParserInput(createEnvelope());
+    const parserInput = toParserInput(completedFixture as RawCaptureEnvelope);
 
-    expect(parserInput).toEqual({
-      capturedAt: '2026-08-15T10:00:00.000Z',
-      externalGameId: 'anonymized-game-token',
-      mapId: 'world',
-      mapName: 'World',
-      mode: 'daily-challenge-free',
-      rounds: [
-        {
-          actual: { latitude: 52.23, longitude: 21.01 },
-          distanceInMeters: 1200,
-          durationSeconds: 42,
-          guess: { latitude: 52.2, longitude: 21 },
-          roundNumber: 1,
-          score: 4300,
-          skipped: false,
-          sourceStartedAt: '2026-08-15T09:59:00.000Z',
-          timedOut: false,
-          timedOutWithGuess: false,
-        },
-      ],
-      source: DAILY_CHALLENGE_FREE_SOURCE,
-      totalDistanceInMeters: 1200,
-      totalScore: 4300,
-      totalTime: 42,
-    });
+    expect(parserInput).toEqual(expectedParserInputFixture);
+  });
+
+  it('contains no identity, leaderboard, or request metadata in the raw fixture', () => {
+    const fixtureKeys = new Set<string>();
+    const collectKeys = (value: unknown): void => {
+      if (value === null || typeof value !== 'object') {
+        return;
+      }
+
+      for (const [key, nestedValue] of Object.entries(value)) {
+        fixtureKeys.add(key);
+        collectKeys(nestedValue);
+      }
+    };
+
+    collectKeys(completedFixture);
+
+    for (const forbiddenKey of ['avatar', 'cookie', 'header', 'nick', 'rank', 'userId']) {
+      expect(fixtureKeys).not.toContain(forbiddenKey);
+    }
   });
 
   it('rejects a capture without visible post-result evidence', () => {
@@ -79,10 +78,7 @@ describe('toParserInput', () => {
   });
 
   it('rejects unaligned round and guess arrays', () => {
-    const envelope = createEnvelope();
-    envelope.game.guesses = [];
-
-    expect(() => toParserInput(envelope)).toThrow(
+    expect(() => toParserInput(partialFixture as RawCaptureEnvelope)).toThrow(
       'Round and guess arrays must be aligned and non-empty.',
     );
   });

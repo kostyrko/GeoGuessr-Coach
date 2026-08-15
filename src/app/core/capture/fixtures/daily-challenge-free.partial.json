@@ -1,0 +1,16 @@
+{
+  "contractVersion": 1,
+  "capturedAt": "2030-01-02T03:04:10.000Z",
+  "evidence": {
+    "resultViewVisibleAt": "2030-01-02T03:04:05.000Z",
+    "responseObservedAt": "2030-01-02T03:04:06.000Z"
+  },
+  "source": "daily-challenge-free-leaderboard",
+  "mode": "daily-challenge-free",
+  "game": {
+    "token": "fixture-partial-game",
+    "mode": "standard",
+    "rounds": [{ "lat": 10.25, "lng": 20.5 }],
+    "guesses": []
+  }
+}

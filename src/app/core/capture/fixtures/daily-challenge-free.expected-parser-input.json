@@ -1,0 +1,73 @@
+{
+  "capturedAt": "2030-01-02T03:04:10.000Z",
+  "externalGameId": "fixture-daily-challenge-free-001",
+  "mapId": "fixture-world-map",
+  "mapName": "Fixture World",
+  "mode": "daily-challenge-free",
+  "source": "daily-challenge-free-leaderboard",
+  "totalScore": 15450,
+  "totalDistanceInMeters": 321000,
+  "totalTime": 245,
+  "rounds": [
+    {
+      "roundNumber": 1,
+      "actual": { "latitude": 10.25, "longitude": 20.5 },
+      "guess": { "latitude": 10.1, "longitude": 20.4 },
+      "score": 4200,
+      "distanceInMeters": 21000,
+      "durationSeconds": 35,
+      "timedOut": false,
+      "timedOutWithGuess": false,
+      "skipped": false,
+      "sourceStartedAt": "2030-01-02T03:00:00.000Z"
+    },
+    {
+      "roundNumber": 2,
+      "actual": { "latitude": -12.75, "longitude": 44.25 },
+      "guess": { "latitude": -13, "longitude": 44 },
+      "score": 3600,
+      "distanceInMeters": 37000,
+      "durationSeconds": 45,
+      "timedOut": false,
+      "timedOutWithGuess": false,
+      "skipped": false,
+      "sourceStartedAt": "2030-01-02T03:01:00.000Z"
+    },
+    {
+      "roundNumber": 3,
+      "actual": { "latitude": 33.5, "longitude": -70.5 },
+      "guess": { "latitude": 33, "longitude": -71 },
+      "score": 2700,
+      "distanceInMeters": 68000,
+      "durationSeconds": 60,
+      "timedOut": true,
+      "timedOutWithGuess": true,
+      "skipped": false,
+      "sourceStartedAt": "2030-01-02T03:02:00.000Z"
+    },
+    {
+      "roundNumber": 4,
+      "actual": { "latitude": -25.25, "longitude": 133.75 },
+      "guess": { "latitude": -25, "longitude": 134 },
+      "score": 1900,
+      "distanceInMeters": 91000,
+      "durationSeconds": 55,
+      "timedOut": false,
+      "timedOutWithGuess": false,
+      "skipped": false,
+      "sourceStartedAt": "2030-01-02T03:03:00.000Z"
+    },
+    {
+      "roundNumber": 5,
+      "actual": { "latitude": 52.5, "longitude": 13.4 },
+      "guess": { "latitude": 52.5, "longitude": 13.4 },
+      "score": 3050,
+      "distanceInMeters": 104000,
+      "durationSeconds": 50,
+      "timedOut": false,
+      "timedOutWithGuess": false,
+      "skipped": true,
+      "sourceStartedAt": "2030-01-02T03:04:00.000Z"
+    }
+  ]
+}

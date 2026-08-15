@@ -1,0 +1,78 @@
+{
+  "contractVersion": 1,
+  "capturedAt": "2030-01-02T03:04:10.000Z",
+  "evidence": {
+    "resultViewVisibleAt": "2030-01-02T03:04:05.000Z",
+    "responseObservedAt": "2030-01-02T03:04:06.000Z"
+  },
+  "source": "daily-challenge-free-leaderboard",
+  "mode": "daily-challenge-free",
+  "game": {
+    "token": "fixture-daily-challenge-free-001",
+    "mode": "standard",
+    "mapId": "fixture-world-map",
+    "mapName": "Fixture World",
+    "totalScore": 15450,
+    "totalDistanceInMeters": 321000,
+    "totalTime": 245,
+    "rounds": [
+      { "lat": 10.25, "lng": 20.5, "startTime": "2030-01-02T03:00:00.000Z" },
+      { "lat": -12.75, "lng": 44.25, "startTime": "2030-01-02T03:01:00.000Z" },
+      { "lat": 33.5, "lng": -70.5, "startTime": "2030-01-02T03:02:00.000Z" },
+      { "lat": -25.25, "lng": 133.75, "startTime": "2030-01-02T03:03:00.000Z" },
+      { "lat": 52.5, "lng": 13.4, "startTime": "2030-01-02T03:04:00.000Z" }
+    ],
+    "guesses": [
+      {
+        "lat": 10.1,
+        "lng": 20.4,
+        "distanceInMeters": 21000,
+        "roundScoreInPoints": 4200,
+        "time": 35,
+        "timedOut": false,
+        "timedOutWithGuess": false,
+        "skippedRound": false
+      },
+      {
+        "lat": -13,
+        "lng": 44,
+        "distanceInMeters": 37000,
+        "roundScoreInPoints": 3600,
+        "time": 45,
+        "timedOut": false,
+        "timedOutWithGuess": false,
+        "skippedRound": false
+      },
+      {
+        "lat": 33,
+        "lng": -71,
+        "distanceInMeters": 68000,
+        "roundScoreInPoints": 2700,
+        "time": 60,
+        "timedOut": true,
+        "timedOutWithGuess": true,
+        "skippedRound": false
+      },
+      {
+        "lat": -25,
+        "lng": 134,
+        "distanceInMeters": 91000,
+        "roundScoreInPoints": 1900,
+        "time": 55,
+        "timedOut": false,
+        "timedOutWithGuess": false,
+        "skippedRound": false
+      },
+      {
+        "lat": 52.5,
+        "lng": 13.4,
+        "distanceInMeters": 104000,
+        "roundScoreInPoints": 3050,
+        "time": 50,
+        "timedOut": false,
+        "timedOutWithGuess": false,
+        "skippedRound": true
+      }
+    ]
+  }
+}
