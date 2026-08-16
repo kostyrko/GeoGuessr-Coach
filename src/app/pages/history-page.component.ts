@@ -2,10 +2,11 @@ import { DatePipe, DecimalPipe } from '@angular/common';
 import { Component, OnInit, inject, signal } from '@angular/core';
 
 import { HistoryDataService, type HistoryGame } from '../core/storage/history-data.service';
+import { CountryNamePipe } from '../shared/country-name.pipe';
 
 @Component({
   selector: 'app-history-page',
-  imports: [DatePipe, DecimalPipe],
+  imports: [CountryNamePipe, DatePipe, DecimalPipe],
   template: `
     <section class="page-header" aria-labelledby="history-title">
       <p class="eyebrow">Local gameplay data</p>
@@ -73,8 +74,8 @@ import { HistoryDataService, type HistoryGame } from '../core/storage/history-da
                   @for (round of entry.rounds; track round.id) {
                     <tr>
                       <th scope="row">{{ round.roundNumber }}</th>
-                      <td>{{ round.actualCountryCode ?? 'Unresolved' }}</td>
-                      <td>{{ round.guessedCountryCode ?? 'Unresolved' }}</td>
+                      <td>{{ round.actualCountryCode | countryName }}</td>
+                      <td>{{ round.guessedCountryCode | countryName }}</td>
                       <td>{{ round.score | number }}</td>
                       <td>{{ round.distanceInMeters / 1000 | number: '1.1-1' }} km</td>
                       <td>{{ round.durationSeconds | number }} s</td>
