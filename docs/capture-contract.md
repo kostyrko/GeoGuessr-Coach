@@ -7,7 +7,7 @@ The collector runs automatically while the extension is installed and enabled in
 Automatic does not mean unrestricted. The collector must remain idle unless all of the following are true:
 
 1. the current flow is a supported mode;
-2. GeoGuessr has visibly shown the completed-result view;
+2. GeoGuessr has visibly shown either the completed-result view or the Daily Challenge summary route after a completed Daily Challenge Free game;
 3. the already-observed response matches the supported source; and
 4. exactly one entry matches the signed-in player in memory.
 
@@ -39,16 +39,16 @@ GeoGuessr content script
 
 ## Support matrix
 
-| Mode                      | Status      | Behavior                                                                                              |
-| ------------------------- | ----------- | ----------------------------------------------------------------------------------------------------- |
-| Daily Challenge Free      | Supported   | Automatically observe the existing Free leaderboard response after the visible completed-result gate. |
-| Standard single-player    | Unsupported | Do not collect; requires a separate validated result source.                                          |
-| Daily Challenge Pro       | Unsupported | Do not collect; requires a separate validated result source.                                          |
-| Challenge / replay        | Unsupported | Do not collect; requires fixture, timing, and replay-policy validation.                               |
-| Competitive / duel / team | Unsupported | Do not collect; requires fairness and ownership validation.                                           |
+| Mode                      | Status      | Behavior                                                                                                                                  |
+| ------------------------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| Daily Challenge Free      | Supported   | Automatically observe the existing Free leaderboard response after the visible result view or `/daily-challenges` post-game summary gate. |
+| Standard single-player    | Unsupported | Do not collect; requires a separate validated result source.                                                                              |
+| Daily Challenge Pro       | Unsupported | Do not collect; requires a separate validated result source.                                                                              |
+| Challenge / replay        | Unsupported | Do not collect; requires fixture, timing, and replay-policy validation.                                                                   |
+| Competitive / duel / team | Unsupported | Do not collect; requires fairness and ownership validation.                                                                               |
 
 ## Data minimization
 
 - Match the signed-in player in memory and immediately discard all non-matching leaderboard entries.
 - Do not persist identity, nickname, avatar, rank, account bootstrap fields, headers, cookies, or request metadata.
-- Do not read actual/guess fields before visible result evidence exists.
+- Do not read actual/guess fields before visible post-result evidence exists.

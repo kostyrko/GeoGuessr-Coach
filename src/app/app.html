@@ -1,13 +1,29 @@
-<main>
-  <section aria-labelledby="application-title">
-    <p class="eyebrow">Chrome extension</p>
-    <h1 id="application-title">{{ title }}</h1>
-    <p class="tagline">Get Better. Guess Smarter.</p>
-    <p>
-      The dashboard foundation is ready. Completed-round collection and analytics will be added in
-      the next implementation tickets.
-    </p>
-  </section>
-</main>
-
-<router-outlet />
+<div class="app-shell">
+  <header class="topbar">
+    <a class="brand" routerLink="/overview" aria-label="GeoGuessr Coach overview">
+      <span class="brand-mark" aria-hidden="true">G</span>
+      <span><strong>GeoGuessr Coach</strong><small>Get Better. Guess Smarter.</small></span>
+    </a>
+    <div class="topbar-actions">
+      <button type="button" class="refresh-button" (click)="refreshDashboard()">
+        <span aria-hidden="true">↻</span> Refresh
+      </button>
+      <a class="settings-link" routerLink="/settings">Settings <span aria-hidden="true">→</span></a>
+    </div>
+  </header>
+  <div class="workspace">
+    <nav class="sidebar" aria-label="Primary navigation">
+      @for (item of navigation; track item.path) {
+        <a
+          [routerLink]="item.path"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: item.path === '/overview' }"
+        >
+          <span class="nav-icon" aria-hidden="true">{{ item.icon }}</span
+          ><span>{{ item.label }}</span>
+        </a>
+      }
+    </nav>
+    <main class="page-content" tabindex="-1"><router-outlet /></main>
+  </div>
+</div>

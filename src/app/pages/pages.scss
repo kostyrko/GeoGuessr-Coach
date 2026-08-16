@@ -1,0 +1,210 @@
+:host {
+  display: block;
+  margin: 0 auto;
+  max-width: 90rem;
+}
+.page-header {
+  margin-bottom: 1.75rem;
+}
+.eyebrow,
+.card-label {
+  color: var(--accent-soft);
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: 0.09em;
+  margin: 0 0 0.6rem;
+  text-transform: uppercase;
+}
+h1,
+h2,
+p {
+  margin-top: 0;
+}
+h1 {
+  color: var(--text-primary);
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  letter-spacing: -0.045em;
+  margin-bottom: 0.55rem;
+}
+h2 {
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  letter-spacing: -0.02em;
+}
+.page-header > p:last-child,
+.card p,
+.empty-page p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  max-width: 46rem;
+}
+.empty-hero,
+.empty-page,
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--card-shadow);
+}
+.empty-hero {
+  align-items: center;
+  border-radius: 1rem;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: auto 1fr auto;
+  margin-bottom: 1.5rem;
+  padding: 1.2rem 1.35rem;
+}
+.empty-hero h2 {
+  margin-bottom: 0.25rem;
+}
+.empty-hero p {
+  color: var(--text-secondary);
+  margin-bottom: 0;
+}
+.empty-icon,
+.empty-page > span {
+  align-items: center;
+  background: rgb(139 92 246 / 14%);
+  border: 1px solid rgb(167 139 250 / 24%);
+  border-radius: 0.7rem;
+  color: var(--accent-soft);
+  display: flex;
+  font-size: 1.3rem;
+  height: 2.8rem;
+  justify-content: center;
+  width: 2.8rem;
+}
+a {
+  color: var(--text-primary);
+}
+.empty-hero a,
+.empty-page a {
+  background: var(--accent);
+  border-radius: 0.55rem;
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0.7rem 0.9rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.empty-hero a:hover,
+.empty-page a:hover {
+  background: var(--accent-strong);
+}
+.dashboard-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1.15fr) minmax(18rem, 0.85fr);
+}
+.card {
+  border-radius: 1rem;
+  padding: 1.35rem;
+}
+.recommendation-card {
+  grid-column: 2;
+  grid-row: span 2;
+}
+.map-card {
+  min-height: 17rem;
+}
+.queue-card {
+  min-height: 10rem;
+}
+.metric-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, 1fr);
+}
+.metric-grid span,
+.metric-grid small,
+.card-heading span {
+  color: var(--text-muted);
+  display: block;
+  font-size: 0.78rem;
+}
+.metric-grid strong {
+  color: var(--text-primary);
+  display: block;
+  font-size: 1.65rem;
+  letter-spacing: -0.05em;
+  margin: 0.3rem 0;
+}
+.recommendation-card h2,
+.queue-card h2 {
+  margin-bottom: 0.45rem;
+}
+.status-pill {
+  background: rgb(148 163 184 / 12%);
+  border: 1px solid var(--border-subtle);
+  border-radius: 99px;
+  color: var(--text-secondary);
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 650;
+  margin-top: 0.6rem;
+  padding: 0.35rem 0.55rem;
+}
+.card-heading {
+  align-items: baseline;
+  display: flex;
+  justify-content: space-between;
+}
+.map-placeholder {
+  align-items: center;
+  background:
+    radial-gradient(circle at center, rgb(139 92 246 / 15%), transparent 60%), rgb(15 23 42 / 35%);
+  border: 1px dashed rgb(148 163 184 / 28%);
+  border-radius: 0.75rem;
+  color: var(--text-secondary);
+  display: flex;
+  flex-direction: column;
+  height: 11rem;
+  justify-content: center;
+  text-align: center;
+}
+.map-placeholder span {
+  color: var(--accent-soft);
+  font-size: 2rem;
+}
+.map-placeholder p {
+  font-size: 0.85rem;
+  margin: 0.5rem 1rem 0;
+}
+.empty-page {
+  align-items: center;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  max-width: 42rem;
+  padding: 3.5rem 1.5rem;
+  text-align: center;
+}
+.empty-page h2 {
+  margin: 1rem 0 0.4rem;
+}
+.empty-page p {
+  margin-bottom: 1.2rem;
+}
+@media (max-width: 950px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+  .recommendation-card {
+    grid-column: auto;
+    grid-row: auto;
+  }
+}
+@media (max-width: 620px) {
+  .empty-hero {
+    align-items: start;
+    grid-template-columns: auto 1fr;
+  }
+  .empty-hero a {
+    grid-column: 1 / -1;
+  }
+  .metric-grid {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+}

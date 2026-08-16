@@ -3,6 +3,7 @@
   const SOURCE = 'daily-challenge-free-leaderboard';
   const ENDPOINT = '/api/v3/challenges/daily-challenges/leaderboard/free';
   const emittedGameTokens = new Set();
+  let pendingCandidate;
 
   const emit = (message) => {
     window.dispatchEvent(
@@ -24,6 +25,16 @@
 
   const isCompletedResultVisible = () =>
     document.querySelector('[data-qa="result-view-top"], [data-qa="result-view-bottom"]') !== null;
+
+  // Daily Challenge Free navigates to this summary once a game is complete.
+  // The route contains no active-round UI, and it is accepted only alongside
+  // the already-observed supported completed-game response below.
+  const isDailyChallengeSummaryVisible = () =>
+    window.location.pathname.replace(/\/$/, '') === '/daily-challenges' &&
+    document.readyState !== 'loading';
+
+  const isPostResultGateVisible = () =>
+    isCompletedResultVisible() || isDailyChallengeSummaryVisible();
 
   const getSignedInUserId = () => {
     const stateNode = document.getElementById('__NEXT_DATA__');
@@ -50,9 +61,15 @@
     }
   };
 
-  const createEnvelope = (payload) => {
-    if (!isCompletedResultVisible()) {
-      emitLifecycle('skipped', 'result-view-not-visible');
+  const toFiniteNumber = (value) => {
+    const candidate = value && typeof value === 'object' ? value.amount : value;
+    const number = typeof candidate === 'string' ? Number(candidate) : candidate;
+    return typeof number === 'number' && Number.isFinite(number) ? number : undefined;
+  };
+
+  const createEnvelope = (payload, responseObservedAt) => {
+    if (!isPostResultGateVisible()) {
+      emitLifecycle('skipped', 'post-result-gate-not-visible');
       return undefined;
     }
 
@@ -95,7 +112,7 @@
       capturedAt,
       contractVersion: 1,
       evidence: {
-        responseObservedAt: capturedAt,
+        responseObservedAt,
         resultViewVisibleAt: capturedAt,
       },
       game: {
@@ -118,9 +135,9 @@
           startTime: round.startTime,
         })),
         token: game.token,
-        totalDistanceInMeters: game.player?.totalDistanceInMeters,
-        totalScore: game.player?.totalScore,
-        totalTime: game.player?.totalTime,
+        totalDistanceInMeters: toFiniteNumber(game.player?.totalDistanceInMeters),
+        totalScore: toFiniteNumber(game.player?.totalScore),
+        totalTime: toFiniteNumber(game.player?.totalTime),
       },
       mode: 'daily-challenge-free',
       source: SOURCE,
@@ -130,8 +147,8 @@
     return envelope;
   };
 
-  const handlePayload = (payload) => {
-    const envelope = createEnvelope(payload);
+  const handlePayload = (payload, responseObservedAt) => {
+    const envelope = createEnvelope(payload, responseObservedAt);
     if (!envelope) {
       return;
     }
@@ -143,6 +160,37 @@
     emitLifecycle('completed', 'raw-capture-emitted');
   };
 
+  // A page reload can receive a response before GeoGuessr renders the visible
+  // post-result destination. It stays only in page memory until that gate appears.
+  const processPendingCandidate = () => {
+    if (!pendingCandidate || !isPostResultGateVisible()) {
+      return;
+    }
+
+    const candidate = pendingCandidate;
+    pendingCandidate = undefined;
+    handlePayload(candidate.payload, candidate.responseObservedAt);
+  };
+
+  const queuePayload = (payload) => {
+    pendingCandidate = { payload, responseObservedAt: new Date().toISOString() };
+    processPendingCandidate();
+  };
+
+  const observeResultView = () => {
+    if (!document.documentElement) {
+      window.setTimeout(observeResultView, 0);
+      return;
+    }
+
+    new MutationObserver(processPendingCandidate).observe(document.documentElement, {
+      childList: true,
+      subtree: true,
+    });
+  };
+
+  observeResultView();
+
   const observeResponse = (url, response) => {
     if (!isCandidateResponse(url) || !response?.ok) {
       return;
@@ -151,7 +199,7 @@
     response
       .clone()
       .json()
-      .then(handlePayload)
+      .then(queuePayload)
       .catch(() => emitLifecycle('failed', 'candidate-response-not-json'));
   };
 
@@ -185,7 +233,7 @@
         }
 
         try {
-          handlePayload(JSON.parse(this.responseText));
+          queuePayload(JSON.parse(this.responseText));
         } catch {
           emitLifecycle('failed', 'candidate-response-not-json');
         }

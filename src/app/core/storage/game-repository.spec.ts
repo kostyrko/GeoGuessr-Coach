@@ -85,4 +85,25 @@ describe('GameRepository', () => {
       version: DATABASE_SCHEMA_VERSION,
     });
   });
+
+  it('migrates legacy total-score amount objects to numeric normalized values', async () => {
+    const capture = toNormalizedGameCapture(expectedParserInputFixture as NormalizedParserInput);
+    const legacy = new Dexie(databaseName);
+    legacy.version(2).stores({
+      captureEvents: 'occurredAt, status, source, supportedMode',
+      games: 'id, playedAt, mode, source, mapId',
+      metadata: 'id',
+      rounds:
+        'id, gameId, roundNumber, actualCountryCode, guessedCountryCode, sourceStartedAt, [actualCountryCode+sourceStartedAt], [guessedCountryCode+sourceStartedAt]',
+      settings: 'id',
+    });
+    await legacy.open();
+    await legacy.table('games').put({ ...capture.game, totalScore: { amount: '19651' } });
+    legacy.close();
+
+    await expect(repository.getGame(capture.game.id)).resolves.toMatchObject({ totalScore: 19651 });
+    await expect(repository.getSchemaMetadata()).resolves.toMatchObject({
+      version: DATABASE_SCHEMA_VERSION,
+    });
+  });
 });

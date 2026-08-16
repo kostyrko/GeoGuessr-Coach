@@ -15,10 +15,10 @@ Validate the automatic Daily Challenge Free collector against real completed gam
 
 1. Open GeoGuessr and play a Daily Challenge Free game normally.
 2. While a round is active, confirm the `games` and `rounds` tables remain unchanged.
-3. Finish the game and wait for GeoGuessr’s visible result view.
+3. Finish the game and wait for GeoGuessr’s visible result view or its `/daily-challenges` post-game summary page.
 4. Confirm exactly one normalized game is in `games` and its ordered normalized rounds are in `rounds`. `captureEvents` should contain a completed status.
 5. Confirm stored records contain only the selected game and normalized round fields—never other leaderboard entries, nickname, rank, avatar, cookies, or headers.
-6. Reload the GeoGuessr result page or trigger the same response again. Confirm `captureEvents` records `duplicate` and the counts in `games` and `rounds` do not increase.
+6. Refresh the GeoGuessr result page after its visible result panel has loaded. The collector waits for that panel if the observed response arrives early. Confirm `captureEvents` records `duplicate` and the counts in `games` and `rounds` do not increase.
 7. Test an unsupported mode. Confirm no game or round is stored and an `unsupported` or `skipped` lifecycle result is recorded when applicable.
 
 ## Evidence to record

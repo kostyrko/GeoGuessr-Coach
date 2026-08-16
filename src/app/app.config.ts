@@ -1,8 +1,10 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withHashLocation } from '@angular/router';
 
 import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideBrowserGlobalErrorListeners(), provideRouter(routes)],
+  // Extension pages have no server rewrite for nested URLs; hash routing keeps
+  // browser refreshes on index.html while preserving the selected screen.
+  providers: [provideBrowserGlobalErrorListeners(), provideRouter(routes, withHashLocation())],
 };

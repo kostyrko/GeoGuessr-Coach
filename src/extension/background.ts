@@ -16,7 +16,12 @@ declare const chrome: {
   };
 };
 
-const repository = new GameRepository(new CoachDatabase());
+const database = new CoachDatabase();
+const repository = new GameRepository(database);
+
+// Open on service-worker wake so schema migrations apply even before another
+// game is captured. The database remains local to the browser profile.
+void database.open();
 
 chrome.action.onClicked.addListener(() => {
   chrome.runtime.openOptionsPage();

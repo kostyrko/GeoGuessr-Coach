@@ -1,6 +1,15 @@
 html {
+  --accent: #8b5cf6;
+  --accent-strong: #7c3aed;
+  --accent-soft: #c4b5fd;
+  --border-subtle: rgb(148 163 184 / 16%);
+  --card-shadow: 0 1rem 3rem rgb(0 0 0 / 16%);
+  --surface: rgb(18 23 42 / 78%);
+  --text-muted: #94a3b8;
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
   background: #090b14;
-  color: #f8fafc;
+  color: var(--text-primary);
   font-family:
     Inter,
     ui-sans-serif,
@@ -12,5 +21,14 @@ html {
 }
 
 body {
+  background: radial-gradient(circle at 75% -10%, rgb(91 33 182 / 23%), transparent 35%), #090b14;
   margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+:focus-visible {
+  outline: 3px solid var(--accent-soft);
+  outline-offset: 3px;
 }
