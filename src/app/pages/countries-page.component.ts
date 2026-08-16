@@ -2,10 +2,8 @@ import { DecimalPipe, PercentPipe } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 
-import {
-  AnalyticsDataService,
-  type CountryAnalyticsQuery,
-} from '../core/analytics/analytics-data.service';
+import { type CountryAnalyticsQuery } from '../core/analytics/analytics-query';
+import { AnalyticsDataService } from '../core/analytics/analytics-data.service';
 import { CountryNamePipe } from '../shared/country-name.pipe';
 
 type CountrySort = 'country' | 'priority' | 'rounds' | 'score';
@@ -22,11 +20,13 @@ type CountrySort = 'country' | 'priority' | 'rounds' | 'score';
 
     @if (analytics.state() === 'loading') {
       <section class="analytics-state" aria-live="polite">
-        <span aria-hidden="true">◌</span><h2>Loading country performance…</h2>
+        <span aria-hidden="true">◌</span>
+        <h2>Loading country performance…</h2>
       </section>
     } @else if (analytics.state() === 'error') {
       <section class="analytics-state error-state" role="alert">
-        <span aria-hidden="true">!</span><h2>Country performance could not be loaded</h2>
+        <span aria-hidden="true">!</span>
+        <h2>Country performance could not be loaded</h2>
         <button type="button" (click)="refresh()">Try again</button>
       </section>
     } @else if (analytics.model().state === 'empty') {
@@ -100,9 +100,19 @@ type CountrySort = 'country' | 'priority' | 'rounds' | 'score';
                   <td>{{ country.performance.recognitionAccuracy | percent: '1.0-0' }}</td>
                   <td>{{ country.performance.averageScore | number: '1.0-0' }}</td>
                   <td>{{ country.performance.rounds }}</td>
-                  <td><span class="trend" [class]="country.trend.direction">{{ trendLabel(country.trend.direction) }}</span></td>
+                  <td>
+                    <span class="trend" [class]="country.trend.direction">{{
+                      trendLabel(country.trend.direction)
+                    }}</span>
+                  </td>
                   <td>{{ country.recommendation.priority | number: '1.2-2' }}</td>
-                  <td><span class="status-pill" [class.strong]="country.recommendation.strength === 'strong'">{{ statusLabel(country) }}</span></td>
+                  <td>
+                    <span
+                      class="status-pill"
+                      [class.strong]="country.recommendation.strength === 'strong'"
+                      >{{ statusLabel(country) }}</span
+                    >
+                  </td>
                 </tr>
               }
             </tbody>
@@ -119,16 +129,17 @@ export class CountriesPageComponent {
   protected readonly search = signal('');
   protected readonly sort = signal<CountrySort>('priority');
   protected readonly countries = computed(() =>
-    sortCountries(
-      this.analytics.model().countries,
-      this.search(),
-      this.sort(),
-      (countryCode) => countryNameForSearch(countryCode),
+    sortCountries(this.analytics.model().countries, this.search(), this.sort(), (countryCode) =>
+      countryNameForSearch(countryCode),
     ),
   );
 
   protected setSearch(value: string): void {
     this.search.set(value);
+  }
+
+  protected refresh(): void {
+    void this.analytics.refresh();
   }
 
   protected setSort(value: string): void {
@@ -173,19 +184,32 @@ export function sortCountries(
   return countries
     .filter((country) => {
       const name = countryName(country.countryCode).toLocaleLowerCase();
-      return !searchTerm || name.includes(searchTerm) || country.countryCode.toLocaleLowerCase().includes(searchTerm);
+      return (
+        !searchTerm ||
+        name.includes(searchTerm) ||
+        country.countryCode.toLocaleLowerCase().includes(searchTerm)
+      );
     })
     .sort((left, right) => {
       if (sort === 'score') {
-        return left.performance.averageScore - right.performance.averageScore || countryName(left.countryCode).localeCompare(countryName(right.countryCode));
+        return (
+          left.performance.averageScore - right.performance.averageScore ||
+          countryName(left.countryCode).localeCompare(countryName(right.countryCode))
+        );
       }
       if (sort === 'rounds') {
-        return right.performance.rounds - left.performance.rounds || countryName(left.countryCode).localeCompare(countryName(right.countryCode));
+        return (
+          right.performance.rounds - left.performance.rounds ||
+          countryName(left.countryCode).localeCompare(countryName(right.countryCode))
+        );
       }
       if (sort === 'country') {
         return countryName(left.countryCode).localeCompare(countryName(right.countryCode));
       }
-      return right.recommendation.priority - left.recommendation.priority || countryName(left.countryCode).localeCompare(countryName(right.countryCode));
+      return (
+        right.recommendation.priority - left.recommendation.priority ||
+        countryName(left.countryCode).localeCompare(countryName(right.countryCode))
+      );
     });
 }
 
