@@ -4,15 +4,17 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build && npm run verify:extension-csp && npm run build:extension-worker",
+    "build": "ng build && npm run verify:extension-csp && npm run build:extension-worker && npm run verify:extension-package",
     "build:extension-worker": "esbuild src/extension/background.ts --bundle --format=esm --platform=browser --target=es2022 --outfile=dist/geoguessr-coach/browser/background.js",
     "verify:extension-csp": "node scripts/assert-extension-csp.mjs",
+    "verify:extension-package": "node scripts/verify-extension-package.mjs",
     "watch": "ng build --watch --configuration development",
     "test": "ng test --watch=false",
     "typecheck": "tsc --project tsconfig.app.json --noEmit",
     "format:check": "prettier --check .",
     "format": "prettier --write .",
-    "generate:performance-fixture": "node scripts/generate-performance-fixture.mjs"
+    "generate:performance-fixture": "node scripts/generate-performance-fixture.mjs",
+    "test:e2e": "playwright test"
   },
   "private": true,
   "packageManager": "npm@11.12.1",
@@ -34,6 +36,7 @@
     "@angular/build": "^21.2.20",
     "@angular/cli": "^21.2.20",
     "@angular/compiler-cli": "^21.2.0",
+    "@playwright/test": "^1.62.1",
     "esbuild": "^0.28.1",
     "fake-indexeddb": "^6.2.5",
     "jsdom": "^28.0.0",

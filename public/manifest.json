@@ -3,6 +3,12 @@
   "name": "GeoGuessr Coach",
   "version": "0.1.0",
   "description": "A privacy-first coach for completed GeoGuessr rounds.",
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
   "permissions": ["storage"],
   "host_permissions": ["https://www.geoguessr.com/*"],
   "background": {
@@ -11,7 +17,13 @@
   },
   "action": {
     "default_popup": "popup.html",
-    "default_title": "Open GeoGuessr Coach"
+    "default_title": "Open GeoGuessr Coach",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    }
   },
   "options_page": "index.html",
   "content_scripts": [
