@@ -11,7 +11,8 @@
     "test": "ng test --watch=false",
     "typecheck": "tsc --project tsconfig.app.json --noEmit",
     "format:check": "prettier --check .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "generate:performance-fixture": "node scripts/generate-performance-fixture.mjs"
   },
   "private": true,
   "packageManager": "npm@11.12.1",

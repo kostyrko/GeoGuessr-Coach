@@ -121,4 +121,14 @@ describe('GameRepository', () => {
     await expect(repository.getRounds()).resolves.toEqual([]);
     await expect(database.captureEvents.toArray()).resolves.toEqual([]);
   });
+
+  it('restores an exported backup after local data is removed', async () => {
+    const capture = toNormalizedGameCapture(expectedParserInputFixture as NormalizedParserInput);
+    await repository.saveCapture(capture);
+    const backup = await repository.exportNormalizedData('2030-01-01T00:00:00.000Z');
+    await repository.deleteAllGameplayData();
+    await repository.importNormalizedData(backup);
+    await expect(repository.getGame(capture.game.id)).resolves.toEqual(capture.game);
+    await expect(repository.getRoundsForGame(capture.game.id)).resolves.toEqual(capture.rounds);
+  });
 });

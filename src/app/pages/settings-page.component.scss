@@ -58,6 +58,26 @@
   font-size: 0.85rem;
   margin-top: 0.9rem;
 }
+.export-actions {
+  display: grid;
+  gap: 0.65rem;
+}
+.export-actions button,
+.export-actions label {
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.55rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font: inherit;
+  padding: 0.65rem 0.85rem;
+  text-align: left;
+}
+.export-actions input {
+  display: block;
+  margin-top: 0.45rem;
+  max-width: 100%;
+}
 @media (max-width: 760px) {
   .settings-grid {
     grid-template-columns: 1fr;

@@ -45,3 +45,7 @@ PRD/                 Product, design, and implementation-plan documents
 ```
 
 See [`AGENTS.md`](./AGENTS.md) for project constraints and the no-commit policy for agents.
+
+# GeoGuessr Coach
+
+Local-first Chrome extension for reviewing supported completed GeoGuessr rounds. See [release checklist](docs/release-checklist.md), [exports](docs/exports.md), and [performance validation](docs/performance.md).

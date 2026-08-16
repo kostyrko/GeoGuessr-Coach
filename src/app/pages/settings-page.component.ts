@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 
 import { AnalyticsDataService } from '../core/analytics/analytics-data.service';
+import { toRoundCsv, toRoundGeoJson } from '../core/export/data-portability';
 import { CoachDatabase } from '../core/storage/coach-database';
 import { GameRepository } from '../core/storage/game-repository';
 
@@ -22,6 +23,25 @@ import { GameRepository } from '../core/storage/game-repository';
           <li>Only supported, completed GeoGuessr rounds are collected.</li>
           <li>Export and restore will be added in the backup ticket.</li>
         </ul>
+      </article>
+      <article class="card">
+        <p class="card-label">Backup and export</p>
+        <h2>Keep a local copy</h2>
+        <div class="export-actions">
+          <button type="button" (click)="exportJson()">Download JSON backup</button
+          ><button type="button" (click)="exportCsv()">Download round CSV</button
+          ><button type="button" (click)="exportGeoJson()">Download GeoJSON</button
+          ><label
+            >Restore JSON backup
+            <input
+              type="file"
+              accept="application/json,.json"
+              (change)="importJson($any($event.target).files?.[0])"
+          /></label>
+        </div>
+        @if (transferMessage()) {
+          <p class="deletion-message" role="status">{{ transferMessage() }}</p>
+        }
       </article>
       <article class="card danger-card">
         <p class="card-label">Data management</p>
@@ -69,6 +89,7 @@ export class SettingsPageComponent {
   protected readonly confirming = signal(false);
   protected readonly deleting = signal(false);
   protected readonly message = signal('');
+  protected readonly transferMessage = signal('');
   protected beginDelete(): void {
     this.confirming.set(true);
     this.message.set('');
@@ -95,4 +116,47 @@ export class SettingsPageComponent {
       this.deleting.set(false);
     }
   }
+  protected async exportJson(): Promise<void> {
+    await this.database.open();
+    download(
+      'geoguessr-coach-backup.json',
+      JSON.stringify(await this.repository.exportNormalizedData(), null, 2),
+      'application/json',
+    );
+  }
+  protected async exportCsv(): Promise<void> {
+    await this.database.open();
+    const backup = await this.repository.exportNormalizedData();
+    download('geoguessr-coach-rounds.csv', toRoundCsv(backup.games, backup.rounds), 'text/csv');
+  }
+  protected async exportGeoJson(): Promise<void> {
+    await this.database.open();
+    const backup = await this.repository.exportNormalizedData();
+    download(
+      'geoguessr-coach-rounds.geojson',
+      JSON.stringify(toRoundGeoJson(backup.games, backup.rounds)),
+      'application/geo+json',
+    );
+  }
+  protected async importJson(file: File | undefined): Promise<void> {
+    if (!file) return;
+    try {
+      await this.repository.importNormalizedData(JSON.parse(await file.text()));
+      await this.analytics.refresh();
+      this.transferMessage.set('Backup restored successfully.');
+    } catch (error) {
+      this.transferMessage.set(
+        error instanceof Error ? error.message : 'Backup could not be restored.',
+      );
+    }
+  }
+}
+
+function download(filename: string, content: string, type: string): void {
+  const url = URL.createObjectURL(new Blob([content], { type }));
+  const anchor = document.createElement('a');
+  anchor.href = url;
+  anchor.download = filename;
+  anchor.click();
+  URL.revokeObjectURL(url);
 }

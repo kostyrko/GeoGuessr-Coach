@@ -9,6 +9,7 @@ import type {
   SettingsRecord,
 } from '../domain/game-model';
 import { GAME_SCHEMA_VERSION } from '../domain/game-model';
+import { validateBackupDocument } from '../export/data-portability';
 
 import {
   CoachDatabase,
@@ -128,6 +129,26 @@ export class GameRepository {
       schemaVersion: GAME_SCHEMA_VERSION,
       settings,
     };
+  }
+
+  async importNormalizedData(document: unknown): Promise<void> {
+    const backup = validateBackupDocument(document);
+    await this.database.transaction(
+      'rw',
+      this.database.captureEvents,
+      this.database.games,
+      this.database.rounds,
+      this.database.settings,
+      async () => {
+        await this.database.captureEvents.clear();
+        await this.database.games.clear();
+        await this.database.rounds.clear();
+        await this.database.games.bulkPut([...backup.games]);
+        await this.database.rounds.bulkPut([...backup.rounds]);
+        await this.database.captureEvents.bulkPut([...backup.captureEvents]);
+        await this.database.settings.put(backup.settings);
+      },
+    );
   }
 
   async deleteAllGameplayData(): Promise<void> {
