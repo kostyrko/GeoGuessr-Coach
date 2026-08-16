@@ -78,10 +78,15 @@ interface HoveredCountry {
             </fieldset>
             <button type="button" (click)="resetView()">Reset view</button>
           </div>
+          <p id="map-help" class="visually-hidden">
+            Choose a metric, then select a colored country to open details. Keyboard-accessible
+            country links are listed beside the map.
+          </p>
           <div
             #mapContainer
             class="map-canvas"
-            aria-label="Interactive world map. Choose a metric, then select a colored country to open details."
+            aria-describedby="map-help"
+            aria-label="Interactive world map"
           ></div>
           <div class="map-legend" aria-label="Map legend">
             <span><i class="legend-swatch weak"></i>Lower / weaker</span
@@ -123,6 +128,18 @@ interface HoveredCountry {
               without data remain muted.
             </p>
           }
+          <section class="mapped-country-links" aria-labelledby="mapped-countries-title">
+            <h3 id="mapped-countries-title">Mapped countries</h3>
+            <ul>
+              @for (country of analytics.model().map; track country.countryCode) {
+                <li>
+                  <button type="button" (click)="openCountry(country.countryCode)">
+                    {{ country.countryCode | countryName }}
+                  </button>
+                </li>
+              }
+            </ul>
+          </section>
         </aside>
       </section>
     }

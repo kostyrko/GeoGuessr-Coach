@@ -10,6 +10,7 @@
     "type": "module"
   },
   "action": {
+    "default_popup": "popup.html",
     "default_title": "Open GeoGuessr Coach"
   },
   "options_page": "index.html",

@@ -5,6 +5,8 @@ import { HistoryPageComponent } from './pages/history-page.component';
 import { PlaceholderPageComponent } from './pages/placeholder-page.component';
 import { CountriesPageComponent } from './pages/countries-page.component';
 import { CountryDetailPageComponent } from './pages/country-detail-page.component';
+import { PracticePageComponent } from './pages/practice-page.component';
+import { SettingsPageComponent } from './pages/settings-page.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'overview' },
@@ -26,24 +28,13 @@ export const routes: Routes = [
     title: 'Country Detail · GeoGuessr Coach',
   },
   {
-    component: PlaceholderPageComponent,
-    data: {
-      description:
-        'Recommendations will be shown after enough completed rounds build a trustworthy profile.',
-      eyebrow: 'Coaching',
-      title: 'Practice',
-    },
+    component: PracticePageComponent,
     path: 'practice',
     title: 'Practice · GeoGuessr Coach',
   },
   { component: HistoryPageComponent, path: 'history', title: 'History · GeoGuessr Coach' },
   {
-    component: PlaceholderPageComponent,
-    data: {
-      description: 'Backup, restore, and data-management controls will live here.',
-      eyebrow: 'Local-first controls',
-      title: 'Settings',
-    },
+    component: SettingsPageComponent,
     path: 'settings',
     title: 'Settings · GeoGuessr Coach',
   },

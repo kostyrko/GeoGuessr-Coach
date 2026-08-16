@@ -9,7 +9,11 @@ declare const chrome: {
   runtime: {
     onMessage: {
       addListener(
-        listener: (message: unknown, sender: { tab?: { url?: string } }) => boolean | undefined,
+        listener: (
+          message: unknown,
+          sender: { tab?: { url?: string } },
+          sendResponse: (response: unknown) => void,
+        ) => boolean | undefined,
       ): void;
     };
     openOptionsPage(): void;
@@ -27,7 +31,12 @@ chrome.action.onClicked.addListener(() => {
   chrome.runtime.openOptionsPage();
 });
 
-chrome.runtime.onMessage.addListener((message, sender) => {
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (isCaptureStatusRequest(message)) {
+    void repository.getLatestCaptureEvent().then((event) => sendResponse({ event }));
+    return true;
+  }
+
   if (!isGeoGuessrContentMessage(sender)) {
     return;
   }
@@ -44,6 +53,10 @@ chrome.runtime.onMessage.addListener((message, sender) => {
 
   return;
 });
+
+function isCaptureStatusRequest(message: unknown): boolean {
+  return isRecord(message) && message['type'] === 'geoguessr-coach:get-capture-status';
+}
 
 async function persistRawCapture(envelope: RawCaptureEnvelope): Promise<void> {
   try {

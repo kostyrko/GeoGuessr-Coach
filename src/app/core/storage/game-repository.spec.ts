@@ -106,4 +106,19 @@ describe('GameRepository', () => {
       version: DATABASE_SCHEMA_VERSION,
     });
   });
+
+  it('deletes games, rounds, and capture lifecycle records together', async () => {
+    const capture = toNormalizedGameCapture(expectedParserInputFixture as NormalizedParserInput);
+    await repository.saveCapture(capture);
+    await repository.recordCaptureEvent({
+      occurredAt: '2030-01-01T00:00:00.000Z',
+      status: 'completed',
+    });
+
+    await repository.deleteAllGameplayData();
+
+    await expect(repository.getGames()).resolves.toEqual([]);
+    await expect(repository.getRounds()).resolves.toEqual([]);
+    await expect(database.captureEvents.toArray()).resolves.toEqual([]);
+  });
 });

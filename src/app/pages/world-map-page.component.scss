@@ -140,12 +140,36 @@ button {
   margin-top: 1rem;
   width: 100%;
 }
+.mapped-country-links {
+  border-top: 1px solid var(--border-subtle);
+  margin-top: 1rem;
+  padding-top: 0.85rem;
+}
+.mapped-country-links h3 {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  margin: 0 0 0.5rem;
+  text-transform: uppercase;
+}
+.mapped-country-links ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.mapped-country-links button {
+  font-size: 0.75rem;
+  padding: 0.35rem 0.45rem;
+}
 @media (max-width: 900px) {
   .map-layout {
     grid-template-columns: 1fr;
   }
   .map-info {
-    display: none;
+    display: block;
   }
 }
 @media (max-width: 620px) {

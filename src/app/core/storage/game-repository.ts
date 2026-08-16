@@ -96,6 +96,11 @@ export class GameRepository {
     return failedEvents.sort((left, right) => right.occurredAt.localeCompare(left.occurredAt))[0];
   }
 
+  async getLatestCaptureEvent(): Promise<CaptureLifecycleEvent | undefined> {
+    const events = await this.database.captureEvents.toArray();
+    return events.sort((left, right) => right.occurredAt.localeCompare(left.occurredAt))[0];
+  }
+
   async getSchemaMetadata(): Promise<SchemaMetadataRecord> {
     return (
       (await this.database.metadata.get('schema')) ?? {
@@ -126,9 +131,16 @@ export class GameRepository {
   }
 
   async deleteAllGameplayData(): Promise<void> {
-    await this.database.transaction('rw', this.database.games, this.database.rounds, async () => {
-      await this.database.games.clear();
-      await this.database.rounds.clear();
-    });
+    await this.database.transaction(
+      'rw',
+      this.database.captureEvents,
+      this.database.games,
+      this.database.rounds,
+      async () => {
+        await this.database.captureEvents.clear();
+        await this.database.games.clear();
+        await this.database.rounds.clear();
+      },
+    );
   }
 }

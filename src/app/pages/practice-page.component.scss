@@ -1,0 +1,72 @@
+@use './pages';
+.practice-state {
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 1rem;
+  max-width: 48rem;
+  padding: 2rem;
+}
+.practice-hero {
+  margin-bottom: 1rem;
+}
+.practice-hero h2 {
+  font-size: 2rem;
+}
+.practice-hero button {
+  background: var(--accent);
+  border: 0;
+  border-radius: 0.55rem;
+  color: white;
+  cursor: not-allowed;
+  display: block;
+  font: inherit;
+  font-weight: 700;
+  margin: 1rem 0 0.35rem;
+  opacity: 0.65;
+  padding: 0.75rem 1rem;
+}
+.practice-hero small {
+  color: var(--text-muted);
+}
+.reason {
+  color: var(--text-secondary);
+}
+.practice-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.practice-list li {
+  align-items: center;
+  border-top: 1px solid var(--border-subtle);
+  display: grid;
+  gap: 0.7rem;
+  grid-template-columns: 2rem minmax(9rem, 1fr) minmax(12rem, 1.4fr) auto;
+  padding: 0.9rem 0;
+}
+.practice-list a {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+.practice-list span:not(.rank) {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+.practice-list strong {
+  color: var(--accent-soft);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+.rank {
+  color: var(--text-muted);
+}
+@media (max-width: 650px) {
+  .practice-list li {
+    align-items: start;
+    grid-template-columns: 1.5rem 1fr;
+  }
+  .practice-list span:not(.rank),
+  .practice-list strong {
+    grid-column: 2;
+  }
+}

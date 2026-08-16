@@ -1,0 +1,65 @@
+@use './pages';
+.settings-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.settings-grid ul {
+  color: var(--text-secondary);
+  line-height: 1.8;
+  padding-left: 1.2rem;
+}
+.danger-card {
+  border-color: rgb(248 113 113 / 32%);
+}
+.confirm-label {
+  color: var(--text-secondary);
+  display: grid;
+  font-size: 0.85rem;
+  gap: 0.45rem;
+  margin: 1rem 0;
+}
+.confirm-label input {
+  background: rgb(15 23 42 / 65%);
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.5rem;
+  color: var(--text-primary);
+  font: inherit;
+  padding: 0.55rem;
+}
+.danger-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+.danger-actions button,
+.delete-button {
+  border-radius: 0.55rem;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  padding: 0.65rem 0.85rem;
+}
+.danger-actions button {
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+}
+.delete-button {
+  background: #b91c1c;
+  border: 1px solid #f87171;
+  color: white;
+}
+.delete-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+.deletion-message {
+  color: #fcd34d;
+  font-size: 0.85rem;
+  margin-top: 0.9rem;
+}
+@media (max-width: 760px) {
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+}
