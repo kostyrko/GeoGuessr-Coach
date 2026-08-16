@@ -50,6 +50,10 @@ export class GameRepository {
     return this.database.games.orderBy('playedAt').reverse().toArray();
   }
 
+  async getRounds(): Promise<RoundRecord[]> {
+    return this.database.rounds.toArray();
+  }
+
   async getRoundsForGame(gameId: string): Promise<RoundRecord[]> {
     const rounds = await this.database.rounds.where('gameId').equals(gameId).toArray();
     return rounds.sort((left, right) => left.roundNumber - right.roundNumber);

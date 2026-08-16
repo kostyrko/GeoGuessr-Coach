@@ -25,3 +25,7 @@ Confusion analysis groups resolved, incorrect country guesses by the resolved ac
 ## Practice ranking
 
 The practice queue is derived from country metrics, confidence, trend, and confusion data; it never reads raw collector payloads. Its deterministic MVP formula and eligibility rules are recorded in [ADR-0004](../PRD/decisions/0004-practice-ranking-policy.md). The engine accepts an explicit reference time, ranks by priority descending and ISO code ascending, and returns an explanation object containing every observable input factor.
+
+## UI query models
+
+`createAnalyticsQueryModel` is the only analytics-to-UI boundary. It converts normalized rounds into typed models for overview, countries, country detail, map, and practice. Components receive country summaries and round summaries rather than Dexie records or collector payloads. `AnalyticsDataService` watches the local rounds table with Dexie `liveQuery`, recomputing this model after an ingest, import, or deletion without requiring a page reload. Empty history and data that is not yet sufficient for a strong recommendation have distinct model states.
