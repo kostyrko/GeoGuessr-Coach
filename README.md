@@ -34,7 +34,7 @@ npm run build
 4. Choose `dist/geoguessr-coach/browser`.
 5. Click the GeoGuessr Coach toolbar action to open the full-page dashboard.
 
-The Manifest V3 files in `public/` are copied into the production build. The collector and parser are intentionally inert until the capture-feasibility tickets are complete.
+The Manifest V3 files in `public/` are copied into the production build. `npm run build` also bundles the local-only background worker, which stores supported completed Daily Challenge Free games in IndexedDB. No collection occurs during active rounds or for unsupported modes.
 
 ## Project structure
 

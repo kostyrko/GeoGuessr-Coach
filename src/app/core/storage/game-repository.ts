@@ -26,6 +26,22 @@ export class GameRepository {
     });
   }
 
+  /**
+   * Atomically creates a game and its rounds once. The deterministic game ID is
+   * the deduplication key across repeated messages and service-worker restarts.
+   */
+  async saveCaptureIfAbsent(capture: NormalizedGameCapture): Promise<'duplicate' | 'stored'> {
+    return this.database.transaction('rw', this.database.games, this.database.rounds, async () => {
+      if (await this.database.games.get(capture.game.id)) {
+        return 'duplicate';
+      }
+
+      await this.database.games.put(capture.game);
+      await this.database.rounds.bulkPut([...capture.rounds]);
+      return 'stored';
+    });
+  }
+
   async getGame(id: string): Promise<GameRecord | undefined> {
     return this.database.games.get(id);
   }

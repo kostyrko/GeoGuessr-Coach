@@ -21,10 +21,11 @@ GeoGuessr content script
   → RawCaptureEnvelope
   → toParserInput()
   → NormalizedParserInput
-  → future parser, repository, analytics, and UI
+  → normalized Game/Round records and country resolution
+  → IndexedDB repository → analytics and UI
 ```
 
-`RawCaptureEnvelope` is the only collector/parser boundary. `NormalizedParserInput` deliberately removes request metadata, DOM state, account data, and other players’ leaderboard entries. Those lower layers must never import collector or page-adapter code. The current background listener logs the envelope locally for development only; persistence begins in the later data-model/repository tickets.
+`RawCaptureEnvelope` is the only collector/parser boundary. `NormalizedParserInput` deliberately removes request metadata, DOM state, account data, and other players’ leaderboard entries. Those lower layers must never import collector or page-adapter code. The bundled background worker persists only normalized game, round, country-resolution, and lifecycle records locally.
 
 ## Capture lifecycle
 
