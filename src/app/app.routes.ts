@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 
 import { OverviewPageComponent } from './pages/overview-page.component';
+import { HistoryPageComponent } from './pages/history-page.component';
 import { PlaceholderPageComponent } from './pages/placeholder-page.component';
 
 export const routes: Routes = [
@@ -38,16 +39,7 @@ export const routes: Routes = [
     path: 'practice',
     title: 'Practice · GeoGuessr Coach',
   },
-  {
-    component: PlaceholderPageComponent,
-    data: {
-      description: 'Your saved games and individual rounds will appear here automatically.',
-      eyebrow: 'Local gameplay data',
-      title: 'History',
-    },
-    path: 'history',
-    title: 'History · GeoGuessr Coach',
-  },
+  { component: HistoryPageComponent, path: 'history', title: 'History · GeoGuessr Coach' },
   {
     component: PlaceholderPageComponent,
     data: {

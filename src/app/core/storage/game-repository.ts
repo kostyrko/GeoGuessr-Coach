@@ -84,6 +84,14 @@ export class GameRepository {
     await this.database.captureEvents.put(event);
   }
 
+  async getLatestFailedCaptureEvent(): Promise<CaptureLifecycleEvent | undefined> {
+    const failedEvents = await this.database.captureEvents
+      .where('status')
+      .equals('failed')
+      .toArray();
+    return failedEvents.sort((left, right) => right.occurredAt.localeCompare(left.occurredAt))[0];
+  }
+
   async getSchemaMetadata(): Promise<SchemaMetadataRecord> {
     return (
       (await this.database.metadata.get('schema')) ?? {
