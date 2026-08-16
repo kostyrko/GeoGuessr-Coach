@@ -3,6 +3,8 @@ import { Routes } from '@angular/router';
 import { OverviewPageComponent } from './pages/overview-page.component';
 import { HistoryPageComponent } from './pages/history-page.component';
 import { PlaceholderPageComponent } from './pages/placeholder-page.component';
+import { CountriesPageComponent } from './pages/countries-page.component';
+import { CountryDetailPageComponent } from './pages/country-detail-page.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'overview' },
@@ -19,14 +21,14 @@ export const routes: Routes = [
     title: 'World Map · GeoGuessr Coach',
   },
   {
-    component: PlaceholderPageComponent,
-    data: {
-      description: 'Country metrics need completed, resolved rounds before they can be calculated.',
-      eyebrow: 'Performance',
-      title: 'Countries',
-    },
+    component: CountriesPageComponent,
     path: 'countries',
     title: 'Countries · GeoGuessr Coach',
+  },
+  {
+    component: CountryDetailPageComponent,
+    path: 'countries/:countryCode',
+    title: 'Country Detail · GeoGuessr Coach',
   },
   {
     component: PlaceholderPageComponent,
