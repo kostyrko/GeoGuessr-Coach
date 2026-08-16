@@ -21,3 +21,7 @@ Trends compare the latest three valid, dated rounds with the immediately precedi
 ## Country confusion policy
 
 Confusion analysis groups resolved, incorrect country guesses by the resolved actual country. Each pair includes a count and its percentage of that country’s resolved incorrect guesses. Pairs are ranked by descending count, then guessed ISO alpha-3 code alphabetically for a stable tie-break. Correct guesses and missing guessed-country data are not confusion pairs; missing guesses are counted separately. A resolved actual country with no incorrect guesses is retained with an empty pair list, allowing the UI to show an intentional empty state. Unresolved actual countries cannot be attributed and are excluded.
+
+## Practice ranking
+
+The practice queue is derived from country metrics, confidence, trend, and confusion data; it never reads raw collector payloads. Its deterministic MVP formula and eligibility rules are recorded in [ADR-0004](../PRD/decisions/0004-practice-ranking-policy.md). The engine accepts an explicit reference time, ranks by priority descending and ISO code ascending, and returns an explanation object containing every observable input factor.
