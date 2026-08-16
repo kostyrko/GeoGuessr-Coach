@@ -4,6 +4,7 @@
   const ENDPOINT = '/api/v3/challenges/daily-challenges/leaderboard/free';
   const emittedGameTokens = new Set();
   let pendingCandidate;
+  let observedUserId;
 
   const emit = (message) => {
     window.dispatchEvent(
@@ -51,6 +52,16 @@
     } catch {
       return undefined;
     }
+  };
+
+  // This is a temporary browser-session identity used solely by the explicit
+  // historical importer to discard every other leaderboard entry. It is not
+  // gameplay data and is never placed in IndexedDB or sent off-device.
+  const observeSignedInUser = () => {
+    const userId = getSignedInUserId();
+    if (!userId || userId === observedUserId) return;
+    observedUserId = userId;
+    emit({ type: 'geoguessr-coach:identity-observed', userId });
   };
 
   const isCandidateResponse = (url) => {
@@ -183,10 +194,11 @@
       return;
     }
 
-    new MutationObserver(processPendingCandidate).observe(document.documentElement, {
-      childList: true,
-      subtree: true,
-    });
+    new MutationObserver(() => {
+      observeSignedInUser();
+      processPendingCandidate();
+    }).observe(document.documentElement, { childList: true, subtree: true });
+    observeSignedInUser();
   };
 
   observeResultView();

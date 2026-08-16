@@ -2,7 +2,13 @@ import { toNormalizedGameCapture, type NormalizedGameCapture } from '../domain/g
 import { resolveRoundCountries } from '../geography/country-resolver';
 import { GameRepository } from '../storage/game-repository';
 
-import { toParserInput, type ParserRoundInput, type RawCaptureEnvelope } from './capture-contract';
+import {
+  toHistoricalImportParserInput,
+  toParserInput,
+  type ParserRoundInput,
+  type RawCaptureEnvelope,
+  type RawDailyChallengeFreeGame,
+} from './capture-contract';
 
 export type CaptureIngestionResult = 'duplicate' | 'stored';
 
@@ -15,6 +21,20 @@ export async function ingestCapture(
   repository: GameRepository,
 ): Promise<CaptureIngestionResult> {
   const parserInput = toParserInput(envelope);
+  const normalizedCapture = toNormalizedGameCapture(parserInput);
+  const captureWithCountries = applyCountryResolution(normalizedCapture, parserInput.rounds);
+
+  return repository.saveCaptureIfAbsent(captureWithCountries);
+}
+
+/** Saves one deliberately requested historical completed game through the
+ * same normalization, country resolution, and idempotency path as capture. */
+export async function ingestHistoricalGame(
+  game: RawDailyChallengeFreeGame,
+  repository: GameRepository,
+  capturedAt = new Date().toISOString(),
+): Promise<CaptureIngestionResult> {
+  const parserInput = toHistoricalImportParserInput(game, capturedAt);
   const normalizedCapture = toNormalizedGameCapture(parserInput);
   const captureWithCountries = applyCountryResolution(normalizedCapture, parserInput.rounds);
 

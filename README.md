@@ -39,15 +39,18 @@ npm run test:e2e
 
 ## What the extension supports
 
-| Area          | MVP behaviour                                                                             |
-| ------------- | ----------------------------------------------------------------------------------------- |
-| Collection    | **Daily Challenge Free only**, after GeoGuessr has visibly shown the completed result.    |
-| Active rounds | No collection, hint, overlay, inference, or live assistance.                              |
-| Storage       | IndexedDB on this device; small preferences in `chrome.storage.local`.                    |
-| Network       | The collector runs only on `geoguessr.com`; no product backend, cloud sync, or telemetry. |
-| Other modes   | Unsupported and intentionally not collected.                                              |
+| Area              | MVP behaviour                                                                                           |
+| ----------------- | ------------------------------------------------------------------------------------------------------- |
+| Collection        | **Daily Challenge Free only**, after GeoGuessr has visibly shown the completed result.                  |
+| Historical import | A user can explicitly import up to the last 90 Daily Challenge Free dates; it never runs automatically. |
+| Active rounds     | No collection, hint, overlay, inference, or live assistance.                                            |
+| Storage           | IndexedDB on this device; small preferences in `chrome.storage.local`.                                  |
+| Network           | The collector runs only on `geoguessr.com`; no product backend, cloud sync, or telemetry.               |
+| Other modes       | Unsupported and intentionally not collected.                                                            |
 
 The dashboard starts with useful empty states. Complete a supported game, reach GeoGuessr’s visible result screen, then open or refresh the dashboard to see locally saved history and analytics.
+
+To import past results, refresh any GeoGuessr page while signed in, then use **Settings → Import last 90 days**. The importer makes one throttled request per date, keeps only the entry matching the temporary browser-session identity, and immediately discards every other leaderboard entry.
 
 ## Release and recovery
 

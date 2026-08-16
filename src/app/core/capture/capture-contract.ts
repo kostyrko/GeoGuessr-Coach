@@ -63,6 +63,48 @@ export interface RawCaptureEnvelope {
   source: CaptureSource;
 }
 
+/**
+ * Converts a deliberately selected historical, completed Daily Challenge Free
+ * game. Unlike automatic collection this is used only by the explicit local
+ * import action, never while a round is active.
+ */
+export function toHistoricalImportParserInput(
+  game: RawDailyChallengeFreeGame,
+  capturedAt: string,
+): NormalizedParserInput {
+  if (game.rounds.length !== game.guesses.length || game.rounds.length === 0) {
+    throw new Error('Round and guess arrays must be aligned and non-empty.');
+  }
+
+  return {
+    capturedAt,
+    externalGameId: game.token,
+    mapId: game.mapId,
+    mapName: game.mapName,
+    mode: 'daily-challenge-free',
+    rounds: game.rounds.map((round, index) => {
+      const guess = game.guesses[index];
+      if (!guess) throw new Error('Round and guess arrays must be aligned.');
+      return {
+        actual: { latitude: round.lat, longitude: round.lng },
+        distanceInMeters: guess.distanceInMeters,
+        durationSeconds: guess.time,
+        guess: { latitude: guess.lat, longitude: guess.lng },
+        roundNumber: index + 1,
+        score: guess.roundScoreInPoints,
+        skipped: guess.skippedRound,
+        sourceStartedAt: round.startTime,
+        timedOut: guess.timedOut,
+        timedOutWithGuess: guess.timedOutWithGuess,
+      };
+    }),
+    source: DAILY_CHALLENGE_FREE_SOURCE,
+    totalDistanceInMeters: game.totalDistanceInMeters,
+    totalScore: game.totalScore,
+    totalTime: game.totalTime,
+  };
+}
+
 export interface ParserRoundInput {
   actual: GeoCoordinate;
   durationSeconds: number;

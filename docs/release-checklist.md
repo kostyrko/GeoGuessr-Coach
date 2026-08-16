@@ -27,6 +27,7 @@ The manifest must have only these permissions:
 - After GeoGuessr visibly displays the completed result, verify one normalized game with five rounds is saved, then refresh the dashboard and inspect History, Overview, Countries, World Map, and Practice.
 - Visit an unsupported GeoGuessr mode and confirm it is not captured.
 - Check empty, partial-data, and capture-error messages remain honest and actionable.
+- From Settings, explicitly import the last 90 Daily Challenge Free dates. Confirm it does not run without the button click, imports only the signed-in player’s records, reports unavailable/failed dates honestly, and deduplicates a second run.
 
 ## Data and recovery
 

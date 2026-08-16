@@ -5,6 +5,27 @@ import { toRoundCsv, toRoundGeoJson } from '../core/export/data-portability';
 import { CoachDatabase } from '../core/storage/coach-database';
 import { GameRepository } from '../core/storage/game-repository';
 
+declare const chrome: {
+  runtime: {
+    sendMessage(
+      message: unknown,
+      callback: (response: HistoricalImportResponse | undefined) => void,
+    ): void;
+  };
+};
+
+interface HistoricalImportResponse {
+  error?: string;
+  result?: {
+    available: number;
+    duplicates: number;
+    failed: number;
+    imported: number;
+    invalid: number;
+    requested: number;
+  };
+}
+
 @Component({
   selector: 'app-settings-page',
   template: `
@@ -23,6 +44,24 @@ import { GameRepository } from '../core/storage/game-repository';
           <li>Only supported, completed GeoGuessr rounds are collected.</li>
           <li>Export and restore will be added in the backup ticket.</li>
         </ul>
+      </article>
+      <article class="card">
+        <p class="card-label">Historical Daily Challenge Free</p>
+        <h2>Import the last 90 days</h2>
+        <p>
+          On request, GeoGuessr Coach checks the last 90 Daily Challenge Free dates and saves only
+          completed games that match your signed-in account. It never runs in the background.
+        </p>
+        <p class="import-note">
+          Before importing, open or refresh any GeoGuessr page while signed in. A temporary
+          browser-session identifier is used only to exclude other leaderboard players.
+        </p>
+        <button type="button" [disabled]="importingHistory()" (click)="importRecentHistory()">
+          {{ importingHistory() ? 'Importing up to 90 days…' : 'Import last 90 days' }}
+        </button>
+        @if (historicalImportMessage()) {
+          <p class="deletion-message" role="status">{{ historicalImportMessage() }}</p>
+        }
       </article>
       <article class="card">
         <p class="card-label">Backup and export</p>
@@ -90,6 +129,8 @@ export class SettingsPageComponent {
   protected readonly deleting = signal(false);
   protected readonly message = signal('');
   protected readonly transferMessage = signal('');
+  protected readonly historicalImportMessage = signal('');
+  protected readonly importingHistory = signal(false);
   protected beginDelete(): void {
     this.confirming.set(true);
     this.message.set('');
@@ -150,6 +191,38 @@ export class SettingsPageComponent {
       );
     }
   }
+  protected async importRecentHistory(): Promise<void> {
+    this.importingHistory.set(true);
+    this.historicalImportMessage.set('');
+    try {
+      const response = await requestHistoricalImport();
+      if (response?.error) {
+        this.historicalImportMessage.set(response.error);
+        return;
+      }
+      const result = response?.result;
+      if (!result) {
+        this.historicalImportMessage.set('Historical import did not return a result. Try again.');
+        return;
+      }
+      await this.analytics.refresh();
+      this.historicalImportMessage.set(
+        `Checked ${result.requested} days: ${result.imported} imported, ${result.duplicates} already saved, ${result.available - result.imported - result.duplicates} unavailable, ${result.invalid} invalid, ${result.failed} failed.`,
+      );
+    } catch {
+      this.historicalImportMessage.set(
+        'Historical import could not be completed. Try again later.',
+      );
+    } finally {
+      this.importingHistory.set(false);
+    }
+  }
+}
+
+function requestHistoricalImport(): Promise<HistoricalImportResponse | undefined> {
+  return new Promise((resolve) => {
+    chrome.runtime.sendMessage({ type: 'geoguessr-coach:import-recent-daily-challenges' }, resolve);
+  });
 }
 
 function download(filename: string, content: string, type: string): void {
