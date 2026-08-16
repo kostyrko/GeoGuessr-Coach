@@ -10,13 +10,8 @@ export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'overview' },
   { component: OverviewPageComponent, path: 'overview', title: 'Overview · GeoGuessr Coach' },
   {
-    component: PlaceholderPageComponent,
-    data: {
-      description:
-        'Your country-level performance will appear here after completed games are saved.',
-      eyebrow: 'Geographic overview',
-      title: 'World Map',
-    },
+    loadComponent: () =>
+      import('./pages/world-map-page.component').then((module) => module.WorldMapPageComponent),
     path: 'world-map',
     title: 'World Map · GeoGuessr Coach',
   },
