@@ -17,3 +17,7 @@ The analytics policy is centralized in `DEFAULT_PERFORMANCE_POLICY`. Confidence 
 No country gets a strong presentational status until it has a high-confidence sample and a known recognition rate. At that point, recognition below 50% is **needs work**, 50%–79% is **learning**, and 80% or higher is **mastered**. This is presentational only; practice-ranking eligibility is defined separately in GGC-015.
 
 Trends compare the latest three valid, dated rounds with the immediately preceding three. Until both windows are full, the trend is unavailable. A score change must be at least 250 points or a recognition change at least 10 percentage points to be meaningful. If the two signals conflict, the trend is neutral. These conservative windows prevent very small samples from implying a reliable improvement or decline.
+
+## Country confusion policy
+
+Confusion analysis groups resolved, incorrect country guesses by the resolved actual country. Each pair includes a count and its percentage of that country’s resolved incorrect guesses. Pairs are ranked by descending count, then guessed ISO alpha-3 code alphabetically for a stable tie-break. Correct guesses and missing guessed-country data are not confusion pairs; missing guesses are counted separately. A resolved actual country with no incorrect guesses is retained with an empty pair list, allowing the UI to show an intentional empty state. Unresolved actual countries cannot be attributed and are excluded.
